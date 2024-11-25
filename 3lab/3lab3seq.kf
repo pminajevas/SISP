@@ -1,0 +1,179 @@
+{
+	"flow_name" : "3lab3seq",
+	"steps" : [
+		{
+			"class" : "weka.knowledgeflow.steps.Loader",
+			"properties" : {
+				"loader" : {
+					"type" : "loader",
+					"class" : "weka.core.converters.ArffLoader",
+					"filePath" : "C:/Program Files/Weka-3-8-6/data/iris_train_test.arff",
+					"useRelativePath" : false
+				},
+				"name" : "ArffLoader"
+			},
+			"connections" : {
+				"dataSet" : [
+					"ClassAssigner"
+				]
+			},
+			"coordinates" : "186,196"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.Loader",
+			"properties" : {
+				"loader" : {
+					"type" : "loader",
+					"class" : "weka.core.converters.ArffLoader",
+					"filePath" : "C:/Program Files/Weka-3-8-6/data/iris_new.arff",
+					"useRelativePath" : false
+				},
+				"name" : "ArffLoader2"
+			},
+			"connections" : {
+				"dataSet" : [
+					"ClassAssigner2"
+				]
+			},
+			"coordinates" : "176,365"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.ClassAssigner",
+			"properties" : {
+				"classColumn" : "/last",
+				"name" : "ClassAssigner"
+			},
+			"connections" : {
+				"dataSet" : [
+					"Remove"
+				]
+			},
+			"coordinates" : "351,197"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.ClassAssigner",
+			"properties" : {
+				"classColumn" : "/last",
+				"name" : "ClassAssigner2"
+			},
+			"connections" : {
+				"dataSet" : [
+					"Remove2"
+				]
+			},
+			"coordinates" : "352,365"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.Filter",
+			"properties" : {
+				"filter" : {
+					"type" : "optionHandler",
+					"class" : "weka.filters.unsupervised.attribute.Remove",
+					"options" : "-R 4"
+				},
+				"name" : "Remove"
+			},
+			"connections" : {
+				"dataSet" : [
+					"TrainingSetMaker"
+				]
+			},
+			"coordinates" : "541,197"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.Filter",
+			"properties" : {
+				"filter" : {
+					"type" : "optionHandler",
+					"class" : "weka.filters.unsupervised.attribute.Remove",
+					"options" : "-R 4"
+				},
+				"name" : "Remove2"
+			},
+			"connections" : {
+				"dataSet" : [
+					"TestSetMaker"
+				]
+			},
+			"coordinates" : "540,364"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.TrainingSetMaker",
+			"properties" : {
+				"name" : "TrainingSetMaker"
+			},
+			"connections" : {
+				"trainingSet" : [
+					"MultilayerPerceptron"
+				]
+			},
+			"coordinates" : "721,197"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.TestSetMaker",
+			"properties" : {
+				"name" : "TestSetMaker"
+			},
+			"connections" : {
+				"testSet" : [
+					"MultilayerPerceptron"
+				]
+			},
+			"coordinates" : "721,363"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.Classifier",
+			"properties" : {
+				"classifier" : {
+					"type" : "optionHandler",
+					"class" : "weka.classifiers.functions.MultilayerPerceptron",
+					"options" : "-L 0.1 -M 0.2 -N 500 -V 0 -S 0 -E 20 -H 6 -R -batch-size 10"
+				},
+				"loadClassifierFileName" : "",
+				"name" : "MultilayerPerceptron",
+				"resetIncrementalClassifier" : false,
+				"updateIncrementalClassifier" : true
+			},
+			"connections" : {
+				"batchClassifier" : [
+					"PredictionAppender"
+				],
+				"text" : [
+					"TextViewer"
+				]
+			},
+			"coordinates" : "902,292"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.PredictionAppender",
+			"properties" : {
+				"appendProbabilities" : true,
+				"name" : "PredictionAppender"
+			},
+			"connections" : {
+				"testSet" : [
+					"TextViewer2"
+				]
+			},
+			"coordinates" : "900,134"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.TextViewer",
+			"properties" : {
+				"name" : "TextViewer"
+			},
+			"connections" : {
+			},
+			"coordinates" : "1044,291"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.TextViewer",
+			"properties" : {
+				"name" : "TextViewer2"
+			},
+			"connections" : {
+			},
+			"coordinates" : "1054,133"
+		}
+	]
+}
